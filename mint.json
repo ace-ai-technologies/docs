@@ -8,18 +8,18 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#0a75ef",
+    "light": "#0a75ef",
+    "dark": "#0a75ef",
     "anchors": {
-      "from": "#0D9373",
+      "from": "#0a75ef",
       "to": "#07C983"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:support@aceaicompany.com"
     }
   ],
   "topbarCtaButton": {
