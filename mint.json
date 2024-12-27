@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Ace Developer",
   "defaultTheme": "dark",
   "logo": {
     "dark": "/logo/dark.svg",
@@ -23,7 +23,7 @@
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
+    "name": "Website",
     "url": "https://dashboard.mintlify.com"
   },
   "tabs": [
@@ -42,19 +42,14 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "name": "Website",
+      "icon": "browser",
+      "url": "https://www.aceaicompany.com/"
     },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://www.aceaicompany.com/"
     }
   ],
   "navigation": [
@@ -62,12 +57,11 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "quickstart"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Mintlify Stuff",
       "pages": [
         "essentials/markdown",
         "essentials/code",
@@ -84,11 +78,10 @@
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Endpoints",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/endpoint/fineTune",
+        "api-reference/endpoint/produceSyntheticData"
       ]
     },
     {
@@ -100,7 +93,7 @@
   ],
   "footerSocials": {
     "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://linkedin.com/company/mintlify"
+    "github": "https://github.com/ace-ai-technologies",
+    "linkedin": "https://www.linkedin.com/company/meetace/"
   }
 }
