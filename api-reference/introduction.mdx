@@ -1,33 +1,53 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'Ace API'
+description: 'Comprehensive guide to the Ace AI API endpoints'
 ---
 
 <Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
+  This documentation is actively being updated as we further develop our API.
 </Note>
 
-## Welcome
+## Welcome to the Ace API
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+The Ace AI API allows developers to interact with AI-related services to:
+- Generate synthetic data.
+- Upload and download datasets using signed URLs.
+- Perform specific tasks with custom AI prompts.
+- (Planned) Perform data refinement and other advanced data tasks.
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+These services are designed to handle client requests efficiently. Additionally, the API can communicate with backend services (including Kafka) for scalable and decoupled processing of tasks like data generation and model training.
+<Note>
+All data will be subject to scrutiny from our team of domain-expert human evaluators.
+</Note>
+
+
+## Core Functionality
+
+The Ace AI API is organized into several key sections:
+1. **Authentication**: Securely log in to obtain session tokens.
+2. **Synthetic Data**: Upload datasets, request synthetic data generation, and download results.
+3. **Generative AI (GenAI)**: Upload datasets for AI tasks, and evaluate them using custom prompts.
+4. **Data Refinery**: *(Coming Soon!)* A placeholder for data preprocessing and management tasks.
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+The `/auth/v1/login` endpoint handles user login and returns a session token (as a cookie and via Bearer token) that is required for accessing protected endpoints.
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```
+## Base Endpoints
+
+Below is a quick list of the core API endpoints. For complete details, please refer to the **Endpoints** section in this documentation.
+
+| Route                           | Method | Description                                                                |
+|---------------------------------|--------|----------------------------------------------------------------------------|
+| `/`                             | GET    | Default route. Returns "hello world!" as a simple health check.            |
+| `/auth/v1/login`               | POST   | Authenticates a user; on success returns/sets a session token.             |
+| `/synthetic/v1/uploadURL`      | GET    | Generates a signed URL for securely uploading datasets.                    |
+| `/synthetic/v1/downloadURL`    | GET    | Generates a signed URL for securely downloading generated or stored data.  |
+| `/synthetic/v1/generate`       | POST   | Requests the creation of synthetic data based on an existing dataset.      |
+| `/genAI/v1/uploadURL`          | GET    | Generates a signed URL to upload data for GenAI tasks.                     |
+| `/genAI/v1/downloadURL`        | GET    | Generates a signed URL to download data used or produced by GenAI tasks.   |
+| `/genAI/v1/perform`           | POST   | Submits a custom prompt for evaluating or analyzing the uploaded dataset.  |
+
+---
+
+This introduction provides a high-level overview of the API, its functionality, and how to get started. For specifics about each endpoint—such as request parameters, response formats, and example usage—please see the dedicated pages in this documentation.

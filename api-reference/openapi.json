@@ -1,54 +1,53 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "ACE AI API",
+    "description": "API for authentication, synthetic data generation, and generative AI tasks.",
+    "version": "1.0.0",
     "license": {
       "name": "MIT"
-    },
-    "version": "1.0.0"
+    }
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
+      "url": "https://api.ace-ai.com",
+      "description": "Production server (this is a placeholder URL)"
+    },
     {
-      "bearerAuth": []
+      "url": "https://dev.api.ace-ai.com",
+      "description": "Development server (this is a placeholder URL)"
     }
   ],
+
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+    "/auth/v1/login": {
+      "post": {
+        "summary": "Log in user",
+        "description": "Authenticates a user by username and password. Returns a session token in a cookie and also requires a Bearer token for subsequent protected endpoints.",
+        "requestBody": {
+          "description": "Credentials for logging in.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthLoginRequest"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "User successfully authenticated.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
+                  "$ref": "#/components/schemas/AuthLoginResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Invalid credentials or request body.",
             "content": {
               "application/json": {
                 "schema": {
@@ -56,35 +55,19 @@
                 }
               }
             }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
+          "401": {
+            "description": "Unauthorized - credentials did not match any user.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
+          "500": {
+            "description": "Internal server error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -96,28 +79,281 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
+
+    "/synthetic/v1/uploadURL": {
+      "get": {
+        "summary": "Obtain a signed URL to upload dataset",
+        "description": "Returns a signed URL that allows authorized clients to upload a dataset to a secure storage bucket.",
+        "security": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "bearerAuth": []
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Signed URL successfully generated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedURLResponse"
+                }
+              }
+            }
           },
-          "400": {
-            "description": "unexpected error",
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/synthetic/v1/downloadURL": {
+      "get": {
+        "summary": "Obtain a signed URL to download dataset",
+        "description": "Returns a signed URL that allows authorized clients to download a previously uploaded or generated synthetic dataset.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed URL successfully generated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedURLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/synthetic/v1/generate": {
+      "post": {
+        "summary": "Request generation of synthetic data",
+        "description": "Creates a request for generating a new synthetic dataset based on an existing dataset. Typically triggers a background process or an agent to generate data.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Information needed for generating synthetic data (omitted in the current example).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyntheticGenerateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Synthetic data generation request successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyntheticGenerateResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/genAI/v1/uploadURL": {
+      "get": {
+        "summary": "Obtain a signed URL to upload dataset (GenAI)",
+        "description": "Returns a signed URL that allows authorized clients to upload data for Generative AI tasks.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed URL successfully generated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedURLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/genAI/v1/downloadURL": {
+      "get": {
+        "summary": "Obtain a signed URL to download dataset (GenAI)",
+        "description": "Returns a signed URL that allows authorized clients to download data used or generated by Generative AI tasks.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed URL successfully generated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedURLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/genAI/v1/perform": {
+      "post": {
+        "summary": "Sends a custom prompt to perform a specific task using GenAI capabilities",
+        "description": "Provides an AI-based analysis, evaluation, or inference on the uploaded dataset by sending a custom prompt. May be used to run model inference or other tasks on the dataset.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Evaluation parameters, specifically the prompt used to instruct the model or AI system.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Evaluation successful, results returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -130,65 +366,114 @@
       }
     }
   },
+
   "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+
+      "AuthLoginRequest": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "The user's username."
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password."
+          }
+        }
+      },
+      "AuthLoginResponse": {
+        "type": "object",
+        "required": ["response"],
+        "properties": {
+          "response": {
+            "type": "string",
+            "example": "Authenticated!",
+            "description": "A confirmation message for successful authentication."
+          }
+        }
+      },
+
+      "SignedURLResponse": {
+        "type": "object",
+        "required": ["signed_url"],
+        "properties": {
+          "signed_url": {
+            "type": "string",
+            "example": "https://storage.google.com/...",
+            "description": "A time-limited URL for uploading or downloading data."
+          }
+        }
+      },
+
+      "SyntheticGenerateRequest": {
+        "type": "object",
+        "description": "Request payload for generating synthetic data. (Currently no specific fields are enforced.)",
+        "properties": {
+          "options": {
+            "type": "string",
+            "description": "Optional extra parameters for generation."
+          }
+        }
+      },
+      "SyntheticGenerateResponse": {
+        "type": "object",
+        "required": ["gen_dataset_id", "status"],
+        "properties": {
+          "gen_dataset_id": {
+            "type": "string",
+            "description": "Unique identifier assigned to the newly generated synthetic dataset."
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the generation request (e.g., 'in-progress', 'complete')."
+          }
+        }
+      },
+
+      "Request": {
+        "type": "object",
+        "required": ["prompt"],
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Custom textual prompt or instructions for evaluating or analyzing the dataset."
+          }
+        }
+      },
+      "Response": {
+        "type": "object",
+        "required": ["results"],
+        "properties": {
+          "results": {
+            "type": "string",
+            "description": "The AI's response or evaluation result for the given prompt."
+          }
+        }
+      },
+
+      "Error": {
+        "type": "object",
+        "required": ["error", "message"],
+        "properties": {
+          "error": {
+            "type": "integer",
+            "description": "Error code or HTTP status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "Details about the error."
+          }
+        }
       }
     }
   }
