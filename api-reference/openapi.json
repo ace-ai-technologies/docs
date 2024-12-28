@@ -311,10 +311,10 @@
       }
     },
 
-    "/genAI/v1/evaluate": {
+    "/genAI/v1/perform": {
       "post": {
-        "summary": "Evaluate data with custom prompt",
-        "description": "Provides an AI-based evaluation, analysis, or inference on the uploaded dataset by sending a custom prompt. May be used to run model inference or other tasks on the dataset.",
+        "summary": "Sends a custom prompt to perform a specific task using GenAI capabilities",
+        "description": "Provides an AI-based analysis, evaluation, or inference on the uploaded dataset by sending a custom prompt. May be used to run model inference or other tasks on the dataset.",
         "security": [
           {
             "bearerAuth": []
@@ -326,7 +326,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EvaluateRequest"
+                "$ref": "#/components/schemas/Request"
               }
             }
           }
@@ -337,7 +337,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EvaluateResponse"
+                  "$ref": "#/components/schemas/Response"
                 }
               }
             }
@@ -440,7 +440,7 @@
         }
       },
 
-      "EvaluateRequest": {
+      "Request": {
         "type": "object",
         "required": ["prompt"],
         "properties": {
@@ -450,11 +450,11 @@
           }
         }
       },
-      "EvaluateResponse": {
+      "Response": {
         "type": "object",
-        "required": ["eval_results"],
+        "required": ["results"],
         "properties": {
-          "eval_results": {
+          "results": {
             "type": "string",
             "description": "The AI's response or evaluation result for the given prompt."
           }

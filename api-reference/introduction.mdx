@@ -12,10 +12,14 @@ description: 'Comprehensive guide to the Ace AI API endpoints'
 The Ace AI API allows developers to interact with AI-related services to:
 - Generate synthetic data.
 - Upload and download datasets using signed URLs.
-- Evaluate datasets with custom AI prompts.
+- Perform specific tasks with custom AI prompts.
 - (Planned) Perform data refinement and other advanced data tasks.
 
 These services are designed to handle client requests efficiently. Additionally, the API can communicate with backend services (including Kafka) for scalable and decoupled processing of tasks like data generation and model training.
+<Note>
+All data will be subject to scrutiny from our team of domain-expert human evaluators.
+</Note>
+
 
 ## Core Functionality
 
@@ -42,7 +46,7 @@ Below is a quick list of the core API endpoints. For complete details, please re
 | `/synthetic/v1/generate`       | POST   | Requests the creation of synthetic data based on an existing dataset.      |
 | `/genAI/v1/uploadURL`          | GET    | Generates a signed URL to upload data for GenAI tasks.                     |
 | `/genAI/v1/downloadURL`        | GET    | Generates a signed URL to download data used or produced by GenAI tasks.   |
-| `/genAI/v1/evaluate`           | POST   | Submits a custom prompt for evaluating or analyzing the uploaded dataset.  |
+| `/genAI/v1/perform`           | POST   | Submits a custom prompt for evaluating or analyzing the uploaded dataset.  |
 
 ---
 

@@ -61,17 +61,6 @@
       ]
     },
     {
-      "group": "Mintlify Template",
-      "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
-    },
-    {
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
@@ -86,7 +75,7 @@
         "api-reference/endpoint/syntheticGenerate",
         "api-reference/endpoint/genAIUploadURL",
         "api-reference/endpoint/genAIDownloadURL",
-        "api-reference/endpoint/genAIEvaluate"
+        "api-reference/endpoint/genAIPerform"
       ]
     },    
     {
