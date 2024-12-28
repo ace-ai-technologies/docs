@@ -24,7 +24,7 @@
   ],
   "topbarCtaButton": {
     "name": "Website",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://www.aceaicompany.com/"
   },
   "tabs": [
     {
@@ -61,7 +61,7 @@
       ]
     },
     {
-      "group": "Mintlify Stuff",
+      "group": "Mintlify Template",
       "pages": [
         "essentials/markdown",
         "essentials/code",
@@ -80,10 +80,15 @@
     {
       "group": "Endpoints",
       "pages": [
-        "api-reference/endpoint/fineTune",
-        "api-reference/endpoint/produceSyntheticData"
+        "api-reference/endpoint/authLogin",
+        "api-reference/endpoint/syntheticUploadURL",
+        "api-reference/endpoint/syntheticDownloadURL",
+        "api-reference/endpoint/syntheticGenerate",
+        "api-reference/endpoint/genAIUploadURL",
+        "api-reference/endpoint/genAIDownloadURL",
+        "api-reference/endpoint/genAIEvaluate"
       ]
-    },
+    },    
     {
       "group": "Changelog",
       "pages": [

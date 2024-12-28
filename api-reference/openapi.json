@@ -1,50 +1,73 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Ace AI API",
-    "description": "API for managing AI agents and related services like fine-tuning models and producing synthetic data.",
+    "title": "ACE AI API",
+    "description": "API for authentication, synthetic data generation, and generative AI tasks.",
+    "version": "1.0.0",
     "license": {
       "name": "MIT"
-    },
-    "version": "1.0.0"
+    }
   },
   "servers": [
     {
-      "url": "http://aceaicompany.com",
-      "description": "TODO: REPLACE THIS WITH PROPER URL AS WELL AS AUTH"
+      "url": "https://api.ace-ai.com",
+      "description": "Production server (this is a placeholder URL)"
+    },
+    {
+      "url": "https://dev.api.ace-ai.com",
+      "description": "Development server (this is a placeholder URL)"
     }
   ],
 
   "paths": {
-    "/agent/fineTune": {
-
+    "/auth/v1/login": {
       "post": {
-        "description": "Fine-tunes an AI agent using the specified dataset and task.",
+        "summary": "Log in user",
+        "description": "Authenticates a user by username and password. Returns a session token in a cookie and also requires a Bearer token for subsequent protected endpoints.",
         "requestBody": {
-          "description": "Details about the agent and dataset to fine-tune.",
+          "description": "Credentials for logging in.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FineTuneRequest"
+                "$ref": "#/components/schemas/AuthLoginRequest"
               }
             }
-          },
-          "required": true
+          }
         },
-        
         "responses": {
           "200": {
-            "description": "Agent fine-tuning successfully triggered.",
+            "description": "User successfully authenticated.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FineTuneResponse"
+                  "$ref": "#/components/schemas/AuthLoginResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid request. Please check the request body.",
+            "description": "Invalid credentials or request body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - credentials did not match any user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -53,47 +76,284 @@
               }
             }
           }
-
         }
       }
-
-
-      
     },
-    
 
-
-
-
-    "/agent/produceSyntheticData": {
+    "/synthetic/v1/uploadURL": {
       "get": {
-        "description": "Requests an AI agent to generate synthetic data.",
-        "parameters": [
+        "summary": "Obtain a signed URL to upload dataset",
+        "description": "Returns a signed URL that allows authorized clients to upload a dataset to a secure storage bucket.",
+        "security": [
           {
-            "name": "TBD - Awaitng route spec.",
-            "in": "path",
-            "description": "ID",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "bearerAuth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Synthetic data generation request successfully sent.",
+            "description": "Signed URL successfully generated.",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "example": "Request a fine-tuned agent to produce synthetic data."
+                  "$ref": "#/components/schemas/SignedURLResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Invalid request.",
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/synthetic/v1/downloadURL": {
+      "get": {
+        "summary": "Obtain a signed URL to download dataset",
+        "description": "Returns a signed URL that allows authorized clients to download a previously uploaded or generated synthetic dataset.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed URL successfully generated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedURLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/synthetic/v1/generate": {
+      "post": {
+        "summary": "Request generation of synthetic data",
+        "description": "Creates a request for generating a new synthetic dataset based on an existing dataset. Typically triggers a background process or an agent to generate data.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Information needed for generating synthetic data (omitted in the current example).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyntheticGenerateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Synthetic data generation request successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyntheticGenerateResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/genAI/v1/uploadURL": {
+      "get": {
+        "summary": "Obtain a signed URL to upload dataset (GenAI)",
+        "description": "Returns a signed URL that allows authorized clients to upload data for Generative AI tasks.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed URL successfully generated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedURLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/genAI/v1/downloadURL": {
+      "get": {
+        "summary": "Obtain a signed URL to download dataset (GenAI)",
+        "description": "Returns a signed URL that allows authorized clients to download data used or generated by Generative AI tasks.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed URL successfully generated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedURLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/genAI/v1/evaluate": {
+      "post": {
+        "summary": "Evaluate data with custom prompt",
+        "description": "Provides an AI-based evaluation, analysis, or inference on the uploaded dataset by sending a custom prompt. May be used to run model inference or other tasks on the dataset.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Evaluation parameters, specifically the prompt used to instruct the model or AI system.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Evaluation successful, results returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluateResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -107,62 +367,111 @@
     }
   },
 
-
-
-  
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
-      "FineTuneRequest": {
-        "required": ["agentId", "agentName", "datasetId", "datasetName", "task"],
+
+      "AuthLoginRequest": {
         "type": "object",
+        "required": ["username", "password"],
         "properties": {
-          "agentId": {
-            "description": "Unique identifier for the agent.",
-            "type": "integer"
+          "username": {
+            "type": "string",
+            "description": "The user's username."
           },
-          "agentName": {
-            "description": "Name of the agent to be fine-tuned.",
-            "type": "string"
-          },
-          "datasetId": {
-            "description": "Unique identifier for the dataset.",
-            "type": "integer"
-          },
-          "datasetName": {
-            "description": "Name of the dataset to be used for fine-tuning.",
-            "type": "string"
-          },
-          "task": {
-            "description": "Type of task for fine-tuning (e.g., classification, regression).",
-            "type": "string"
+          "password": {
+            "type": "string",
+            "description": "The user's password."
           }
         }
       },
-      "FineTuneResponse": {
-        "required": ["success", "msg"],
+      "AuthLoginResponse": {
         "type": "object",
+        "required": ["response"],
         "properties": {
-          "success": {
-            "description": "Indicates whether the fine-tuning request was successfully processed.",
-            "type": "boolean"
-          },
-          "msg": {
-            "description": "Message confirming the operation.",
-            "type": "string"
+          "response": {
+            "type": "string",
+            "example": "Authenticated!",
+            "description": "A confirmation message for successful authentication."
           }
         }
       },
+
+      "SignedURLResponse": {
+        "type": "object",
+        "required": ["signed_url"],
+        "properties": {
+          "signed_url": {
+            "type": "string",
+            "example": "https://storage.google.com/...",
+            "description": "A time-limited URL for uploading or downloading data."
+          }
+        }
+      },
+
+      "SyntheticGenerateRequest": {
+        "type": "object",
+        "description": "Request payload for generating synthetic data. (Currently no specific fields are enforced.)",
+        "properties": {
+          "options": {
+            "type": "string",
+            "description": "Optional extra parameters for generation."
+          }
+        }
+      },
+      "SyntheticGenerateResponse": {
+        "type": "object",
+        "required": ["gen_dataset_id", "status"],
+        "properties": {
+          "gen_dataset_id": {
+            "type": "string",
+            "description": "Unique identifier assigned to the newly generated synthetic dataset."
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the generation request (e.g., 'in-progress', 'complete')."
+          }
+        }
+      },
+
+      "EvaluateRequest": {
+        "type": "object",
+        "required": ["prompt"],
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Custom textual prompt or instructions for evaluating or analyzing the dataset."
+          }
+        }
+      },
+      "EvaluateResponse": {
+        "type": "object",
+        "required": ["eval_results"],
+        "properties": {
+          "eval_results": {
+            "type": "string",
+            "description": "The AI's response or evaluation result for the given prompt."
+          }
+        }
+      },
+
       "Error": {
-        "required": ["error", "message"],
         "type": "object",
+        "required": ["error", "message"],
         "properties": {
           "error": {
             "type": "integer",
-            "description": "Error code."
+            "description": "Error code or HTTP status code."
           },
           "message": {
             "type": "string",
-            "description": "Detailed error message."
+            "description": "Details about the error."
           }
         }
       }
