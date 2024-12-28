@@ -9,36 +9,41 @@ description: 'Comprehensive guide to the Ace AI API endpoints'
 
 ## Welcome to the Ace API
 
-The Ace AI API allows developers to interact with AI agents and related services to fine-tune models, generate synthetic data, clean datasets, and more. This API is designed to handle client requests efficiently and communicate with backend services via Kafka for scalable and decoupled processing.
+The Ace AI API allows developers to interact with AI-related services to:
+- Generate synthetic data.
+- Upload and download datasets using signed URLs.
+- Evaluate datasets with custom AI prompts.
+- (Planned) Perform data refinement and other advanced data tasks.
 
-With this API, you can:
-- Fine-tune AI agents using datasets.
-- Request agents to generate synthetic data.
-- Access and manage datasets with signed URLs.
-- Leverage AI capabilities for custom tasks.
+These services are designed to handle client requests efficiently. Additionally, the API can communicate with backend services (including Kafka) for scalable and decoupled processing of tasks like data generation and model training.
 
 ## Core Functionality
 
 The Ace AI API is organized into several key sections:
-1. **Synthetic Data Management**: Upload/download datasets, clean data, and generate synthetic data.
-2. **Data Refinery**: Placeholder for data preprocessing and management tasks.
-3. **General AI (GenAI)**: Placeholder for general AI-related capabilities.
-
-Each section is modular and extensible, with additional endpoints planned for future updates.
+1. **Authentication**: Securely log in to obtain session tokens.
+2. **Synthetic Data**: Upload datasets, request synthetic data generation, and download results.
+3. **Generative AI (GenAI)**: Upload datasets for AI tasks, and evaluate them using custom prompts.
+4. **Data Refinery**: *(Coming Soon!)* A placeholder for data preprocessing and management tasks.
 
 ## Authentication
-Coming Soon.
+
+The `/auth/v1/login` endpoint handles user login and returns a session token (as a cookie and via Bearer token) that is required for accessing protected endpoints.
 
 ## Base Endpoints
 
-| Route                | Method | Description                                         |
-|----------------------|--------|-----------------------------------------------------|
-| `/`                  | GET    | Default route. Returns "hello world!" as a health check. |
-| `/agent/fineTune`    | POST   | Fine-tunes an AI agent with a given dataset.        |
-| `/agent/produceSyntheticData` | GET    | Requests synthetic data generation from an agent. |
+Below is a quick list of the core API endpoints. For complete details, please refer to the **Endpoints** section in this documentation.
 
-For detailed documentation of each endpoint, refer to the specific API reference pages.
+| Route                           | Method | Description                                                                |
+|---------------------------------|--------|----------------------------------------------------------------------------|
+| `/`                             | GET    | Default route. Returns "hello world!" as a simple health check.            |
+| `/auth/v1/login`               | POST   | Authenticates a user; on success returns/sets a session token.             |
+| `/synthetic/v1/uploadURL`      | GET    | Generates a signed URL for securely uploading datasets.                    |
+| `/synthetic/v1/downloadURL`    | GET    | Generates a signed URL for securely downloading generated or stored data.  |
+| `/synthetic/v1/generate`       | POST   | Requests the creation of synthetic data based on an existing dataset.      |
+| `/genAI/v1/uploadURL`          | GET    | Generates a signed URL to upload data for GenAI tasks.                     |
+| `/genAI/v1/downloadURL`        | GET    | Generates a signed URL to download data used or produced by GenAI tasks.   |
+| `/genAI/v1/evaluate`           | POST   | Submits a custom prompt for evaluating or analyzing the uploaded dataset.  |
 
 ---
 
-This introduction provides an overview of the API, its key functionalities, and a quick reference for getting started. Let me know if you'd like to add anything or move to documenting specific endpoints!
+This introduction provides a high-level overview of the API, its functionality, and how to get started. For specifics about each endpoint—such as request parameters, response formats, and example usage—please see the dedicated pages in this documentation.
