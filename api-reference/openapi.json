@@ -89,6 +89,26 @@
             "bearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Username associated with this request.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The name of the file to be uploaded.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Signed URL successfully generated.",
@@ -131,6 +151,26 @@
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Username associated with this request.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The name of the file to be downloaded.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -232,6 +272,26 @@
             "bearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Username associated with this request.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The name of the file to be uploaded.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Signed URL successfully generated.",
@@ -274,6 +334,26 @@
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Username associated with this request.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "The name of the file to be downloaded.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -376,7 +456,7 @@
       }
     },
     "schemas": {
-
+      
       "AuthLoginRequest": {
         "type": "object",
         "required": ["username", "password"],
