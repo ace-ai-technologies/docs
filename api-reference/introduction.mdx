@@ -41,11 +41,11 @@ Below is a quick list of the core API endpoints. For complete details, please re
 |---------------------------------|--------|----------------------------------------------------------------------------|
 | `/`                             | GET    | Default route. Returns "hello world!" as a simple health check.            |
 | `/auth/v1/login`               | POST   | Authenticates a user; on success returns/sets a session token.             |
-| `/synthetic/v1/uploadURL`      | GET    | Generates a signed URL for securely uploading datasets.                    |
-| `/synthetic/v1/downloadURL`    | GET    | Generates a signed URL for securely downloading generated or stored data.  |
+| `/synthetic/v1/uploadURL`      | POST    | Generates a signed URL for securely uploading datasets.                    |
+| `/synthetic/v1/downloadURL`    | POST    | Generates a signed URL for securely downloading generated or stored data.  |
 | `/synthetic/v1/generate`       | POST   | Requests the creation of synthetic data based on an existing dataset.      |
-| `/genAI/v1/uploadURL`          | GET    | Generates a signed URL to upload data for GenAI tasks.                     |
-| `/genAI/v1/downloadURL`        | GET    | Generates a signed URL to download data used or produced by GenAI tasks.   |
+| `/genAI/v1/uploadURL`          | POST    | Generates a signed URL to upload data for GenAI tasks.                     |
+| `/genAI/v1/downloadURL`        | POST    | Generates a signed URL to download data used or produced by GenAI tasks.   |
 | `/genAI/v1/perform`           | POST   | Submits a custom prompt for evaluating or analyzing the uploaded dataset.  |
 
 ---
