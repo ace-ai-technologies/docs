@@ -10,12 +10,8 @@
   },
   "servers": [
     {
-      "url": "https://api.ace-ai.com",
-      "description": "Production server (this is a placeholder URL)"
-    },
-    {
-      "url": "https://dev.api.ace-ai.com",
-      "description": "Development server (this is a placeholder URL)"
+      "url": "https://api.acecompany.com",
+      "description": "Production server URL"
     }
   ],
 
@@ -456,7 +452,7 @@
       }
     },
     "schemas": {
-      
+
       "AuthLoginRequest": {
         "type": "object",
         "required": ["username", "password"],
