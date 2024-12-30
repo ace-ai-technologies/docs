@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://api.acecompany.com",
+      "url": "https://api.aceaicompany.com/",
       "description": "Production server URL"
     }
   ],
