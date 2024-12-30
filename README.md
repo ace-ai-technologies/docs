@@ -12,7 +12,7 @@ Ensure you have the following installed on your system:
 - [Node.js](https://nodejs.org/) (LTS version recommended)
 - [npm](https://www.npmjs.com/) (comes with Node.js)
 
----
+----
 ### Development Setup
 
 1. Clone the repository:
