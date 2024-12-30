@@ -70,11 +70,11 @@
       "group": "Endpoints",
       "pages": [
         "api-reference/endpoint/authLogin",
-        "api-reference/endpoint/syntheticUploadURL",
-        "api-reference/endpoint/syntheticDownloadURL",
+        "api-reference/endpoint/syntheticUploadURL-new",
+        "api-reference/endpoint/syntheticDownloadURL-new",
         "api-reference/endpoint/syntheticGenerate",
-        "api-reference/endpoint/genAIUploadURL",
-        "api-reference/endpoint/genAIDownloadURL",
+        "api-reference/endpoint/genAIUploadURL-new",
+        "api-reference/endpoint/genAIDownloadURL-new",
         "api-reference/endpoint/genAIPerform"
       ]
     },    
