@@ -83,7 +83,7 @@
         ]
       },
       {
-        "group": "GenAI API",
+        "group": "GenAI API", 
         "pages": [
           "api-reference/endpoint/genAIUploadURL-new",
           "api-reference/endpoint/genAIDownloadURL-new",
