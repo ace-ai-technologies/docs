@@ -10,7 +10,7 @@ To contribute to the documentation or preview changes locally, follow these step
 
 Ensure you have the following installed on your system:
 - [Node.js](https://nodejs.org/) (LTS version recommended)
-- [npm](https://www.npmjs.com/) (comes with Node.js)
+- [npm](https://www.npmjs.com/) (comes with Node.js) t
 
 ------
 ### Development Setup
