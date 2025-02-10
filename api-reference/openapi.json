@@ -15,11 +15,64 @@
     }
   ],
 
+
+
   "paths": {
+
+
+    "/auth/v1/signup": {
+      "post": {
+        "summary": "Sign up new user",
+        "description": "Creates a new user account. Requires username, password, role, org, github, and linkedin.",
+        "requestBody": {
+          "description": "User credentials for sign up.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthSignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully signed up.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthSignupResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or username already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/v1/login": {
       "post": {
         "summary": "Log in user",
-        "description": "Authenticates a user by username and password. Returns a session token in a cookie and also requires a Bearer token for subsequent protected endpoints.",
+        "description": "Authenticates a user by username and password. Returns a session token in an HttpOnly cookie.",
         "requestBody": {
           "description": "Credentials for logging in.",
           "required": true,
@@ -75,6 +128,70 @@
         }
       }
     },
+    "/auth/v1/profile/{username}": {
+      "patch": {
+        "summary": "Update user profile",
+        "description": "Updates a user's profile with expertise, bio, education, and experiences.",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The username of the profile to update."
+          }
+        ],
+        "requestBody": {
+          "description": "Profile fields to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthProfilePatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthProfilePatchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+
     "/synthetic/v1/uploadURL": {
       "post": {
         "summary": "Obtain a signed URL to upload dataset",
@@ -183,7 +300,6 @@
         }
       }
     },
-
     "/synthetic/v1/generate": {
       "post": {
         "summary": "Request generation of synthetic data",
@@ -238,6 +354,11 @@
         }
       }
     },
+
+
+
+
+
     "/genAI/v1/uploadURL": {
       "post": {
         "summary": "Obtain a signed URL to upload dataset (GenAI)",
@@ -346,7 +467,6 @@
         }
       }
     },
-
     "/genAI/v1/perform": {
       "post": {
         "summary": "Sends a custom prompt to perform a specific task using GenAI capabilities",
@@ -400,8 +520,700 @@
           }
         }
       }
+    },
+
+
+
+
+
+    "/editor/v1/tasks/random": {
+      "get": {
+        "summary": "Retrieve a random task",
+        "description": "Fetches a random task based on the provided query parameter 'task-type'. Currently supports 'ellipsis-tier2-task'.",
+        "parameters": [
+          {
+            "name": "task-type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Type of task. For example, 'ellipsis-tier2-task'."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Random task retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditorEllipsisTier2Task"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request – e.g. task-type parameter missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/editor/v1/tasks/{taskType}": {
+      "post": {
+        "summary": "Create a new task",
+        "description": "Creates a new task of the specified type. Currently supports 'ellipsis-tier2-task'.",
+        "parameters": [
+          {
+            "name": "taskType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The type of task to create (e.g. 'ellipsis-tier2-task')."
+          }
+        ],
+        "requestBody": {
+          "description": "Payload containing the details of the task to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditorTaskPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditorTaskPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/editor/v1/tasks/{taskType}/{id}": {
+      "patch": {
+        "summary": "Update an existing task",
+        "description": "Updates fields of an existing task identified by its task type and id.",
+        "parameters": [
+          {
+            "name": "taskType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The type of task to update (e.g. 'ellipsis-tier2-task')."
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The unique identifier of the task."
+          }
+        ],
+        "requestBody": {
+          "description": "Payload containing the fields to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditorTaskPatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditorTaskPatchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+
+
+    "/evaluator/v1/evaluation-data": {
+      "get": {
+        "summary": "Retrieve evaluation data",
+        "description": "Fetch evaluation data filtered by username, status, limit, offset, and expertise.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter evaluation data by evaluator username."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["open", "closed"]
+            },
+            "description": "Filter evaluation data by status."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Maximum number of results to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Number of results to skip."
+          },
+          {
+            "name": "expertise",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Expertise values to filter evaluation data."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evaluation data retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EvaluationData"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create evaluation data",
+        "description": "Creates a new evaluation data entry.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Evaluation data details.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationDataPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Evaluation data created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationDataPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/evaluator/v1/evaluation-data/random": {
+      "get": {
+        "summary": "Retrieve a random evaluation data entry",
+        "description": "Returns a random evaluation data entry based on the evaluator's username.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Evaluator's username used to fetch a random evaluation data entry."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Random evaluation data retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/evaluator/v1/evaluation-data/{id}": {
+      "patch": {
+        "summary": "Update evaluation data",
+        "description": "Updates evaluation data fields such as tags, status, data, and rating.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Unique identifier of the evaluation data entry."
+          }
+        ],
+        "requestBody": {
+          "description": "Fields to update in the evaluation data entry.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationDataPatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Evaluation data updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationDataPatchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/evaluator/v1/evaluation-data/comment": {
+      "get": {
+        "summary": "Retrieve evaluation data comments",
+        "description": "Fetches comments for a given evaluation data entry using the query parameter evalDataId.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "evalDataId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Identifier of the evaluation data entry for which to retrieve comments."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EvaluationComment"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a comment to evaluation data",
+        "description": "Creates a new comment for an evaluation data entry.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Comment details.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationCommentPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment added successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationCommentPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/evaluator/v1/evaluation-data/comment/{id}": {
+      "patch": {
+        "summary": "Update an evaluation data comment",
+        "description": "Updates a comment associated with an evaluation data entry. The commenter in the request body must match the original commenter.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Unique identifier of the comment to update."
+          }
+        ],
+        "requestBody": {
+          "description": "Updated comment details.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationCommentPatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationCommentPatchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an evaluation data comment",
+        "description": "Deletes a comment associated with an evaluation data entry.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Unique identifier of the comment to delete."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationCommentDeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
+
   },
+
+
+
+
+
   "components": {
     "securitySchemes": {
       "bearerAuth": {
@@ -540,7 +1352,553 @@
             "description": "Details about the error."
           }
         }
+      },
+      "AuthSignupRequest": {
+        "type": "object",
+        "required": [
+          "username",
+          "password",
+          "role",
+          "org",
+          "github",
+          "linkedin"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "The new user's username."
+          },
+          "password": {
+            "type": "string",
+            "description": "The new user's password."
+          },
+          "role": {
+            "type": "string",
+            "description": "The role for the new user."
+          },
+          "org": {
+            "type": "string",
+            "description": "The organization for the new user."
+          },
+          "github": {
+            "type": "string",
+            "description": "The GitHub username for the new user."
+          },
+          "linkedin": {
+            "type": "string",
+            "description": "The LinkedIn profile for the new user."
+          }
+        }
+      },
+      "AuthSignupResponse": {
+        "type": "object",
+        "required": [
+          "response"
+        ],
+        "properties": {
+          "response": {
+            "type": "string",
+            "example": "Authenticated!",
+            "description": "A confirmation message for successful sign up."
+          }
+        }
+      },
+      "Education": {
+        "type": "object",
+        "properties": {
+          "institution": {
+            "type": "string",
+            "description": "Name of the institution."
+          },
+          "start": {
+            "type": "string",
+            "description": "Start date."
+          },
+          "end": {
+            "type": "string",
+            "description": "End date."
+          },
+          "degree": {
+            "type": "string",
+            "description": "Degree obtained."
+          }
+        },
+        "required": [
+          "institution",
+          "start",
+          "end",
+          "degree"
+        ]
+      },
+      "Experience": {
+        "type": "object",
+        "properties": {
+          "organization": {
+            "type": "string",
+            "description": "Name of the organization."
+          },
+          "start": {
+            "type": "string",
+            "description": "Start date."
+          },
+          "end": {
+            "type": "string",
+            "description": "End date."
+          },
+          "title": {
+            "type": "string",
+            "description": "Job title."
+          },
+          "description": {
+            "type": "string",
+            "description": "Job description."
+          }
+        },
+        "required": [
+          "organization",
+          "start",
+          "end",
+          "title",
+          "description"
+        ]
+      },
+      "AuthProfilePatchRequest": {
+        "type": "object",
+        "description": "Request body for updating a user profile.",
+        "properties": {
+          "expertise": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of expertise areas."
+          },
+          "bio": {
+            "type": "string",
+            "description": "User biography."
+          },
+          "education": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Education"
+            },
+            "description": "List of education records."
+          },
+          "experiences": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Experience"
+            },
+            "description": "List of experience records."
+          }
+        }
+      },
+      "AuthProfilePatchResponse": {
+        "type": "object",
+        "required": [
+          "response"
+        ],
+        "properties": {
+          "response": {
+            "type": "string",
+            "example": "Authenticated!",
+            "description": "A confirmation message for successful profile update."
+          }
+        }
+      },
+
+
+
+
+      "EditorEllipsisTier2Task": {
+        "type": "object",
+        "description": "Represents an ellipsis tier 2 task.",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "string"
+          },
+          "editor": {
+            "type": "string",
+            "nullable": true
+          },
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "sha": {
+            "type": "string",
+            "nullable": true
+          },
+          "repository_id": {
+            "type": "integer"
+          },
+          "as_of_date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "question": {
+            "type": "string"
+          },
+          "expected_answer": {
+            "type": "string"
+          },
+          "expected_evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": { "type": "string" },
+                "startLine": { "type": "integer" },
+                "endLine": { "type": "integer" },
+                "about": { "type": "string" },
+                "htmlUrl": { "type": "string" }
+              },
+              "required": ["path", "startLine", "endLine", "about", "htmlUrl"]
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EditorTaskPostRequest": {
+        "type": "object",
+        "description": "Request payload for creating a new ellipsis tier 2 task.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the task."
+          },
+          "customer": {
+            "type": "string",
+            "description": "Customer name."
+          },
+          "editor": {
+            "type": "string",
+            "nullable": true,
+            "description": "Editor assigned (optional)."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Owner of the task."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "sha": {
+            "type": "string",
+            "nullable": true,
+            "description": "Git commit SHA."
+          },
+          "repository_id": {
+            "type": "integer",
+            "description": "Repository ID."
+          },
+          "as_of_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date as of which the task is valid."
+          },
+          "question": {
+            "type": "string",
+            "description": "The task question."
+          },
+          "expected_answer": {
+            "type": "string",
+            "description": "The expected answer for the task."
+          },
+          "expected_evidence": {
+            "type": "array",
+            "description": "Expected evidence details.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": { "type": "string" },
+                "startLine": { "type": "integer" },
+                "endLine": { "type": "integer" },
+                "about": { "type": "string" },
+                "htmlUrl": { "type": "string" }
+              },
+              "required": ["path", "startLine", "endLine", "about", "htmlUrl"]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "customer",
+          "owner",
+          "repo",
+          "repository_id",
+          "as_of_date",
+          "question",
+          "expected_answer",
+          "expected_evidence"
+        ]
+      },
+      "EditorTaskPostResponse": {
+        "type": "object",
+        "description": "Response after creating a new task.",
+        "required": ["result"],
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "A confirmation message including details such as rows affected or the inserted id."
+          }
+        }
+      },
+      "EditorTaskPatchRequest": {
+        "type": "object",
+        "description": "Request payload for updating an existing ellipsis tier 2 task.",
+        "properties": {
+          "editor": {
+            "type": "string",
+            "description": "Updated editor value."
+          },
+          "sha": {
+            "type": "string",
+            "description": "Updated commit SHA."
+          },
+          "as_of_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Updated date."
+          },
+          "question": {
+            "type": "string",
+            "description": "Updated task question."
+          },
+          "expected_answer": {
+            "type": "string",
+            "description": "Updated expected answer."
+          },
+          "expected_evidence": {
+            "type": "array",
+            "description": "Updated expected evidence.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": { "type": "string" },
+                "startLine": { "type": "integer" },
+                "endLine": { "type": "integer" },
+                "about": { "type": "string" },
+                "htmlUrl": { "type": "string" }
+              },
+              "required": ["path", "startLine", "endLine", "about", "htmlUrl"]
+            }
+          }
+        }
+      },
+      "EditorTaskPatchResponse": {
+        "type": "object",
+        "description": "Response after updating a task.",
+        "required": ["result"],
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "A confirmation message including details such as rows affected."
+          }
+        }
+      },
+
+
+
+      "EvaluationData": {
+        "type": "object",
+        "description": "Details of an evaluation data entry.",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "task": { "type": "string" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "descriptionTitle": { "type": "string" },
+          "descriptionBody": { "type": "string" },
+          "impact": { "type": "string" },
+          "severity": { "type": "string" },
+          "bounty": { "type": "integer" },
+          "status": { "type": "string" },
+          "data": { "type": "object" },
+          "rating": { "type": "integer" },
+          "bucket": {
+            "type": "string",
+            "nullable": true
+          },
+          "file": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "evaluator": {
+            "type": "string",
+            "nullable": true
+          },
+          "expertise": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "EvaluationDataPostRequest": {
+        "type": "object",
+        "description": "Request payload for creating a new evaluation data entry.",
+        "properties": {
+          "name": { "type": "string" },
+          "task": { "type": "string" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "descriptionTitle": { "type": "string" },
+          "descriptionBody": { "type": "string" },
+          "impact": { "type": "string" },
+          "severity": { "type": "string" },
+          "bounty": { "type": "integer" },
+          "status": { "type": "string" },
+          "data": { "type": "object" },
+          "bucket": {
+            "type": "string",
+            "nullable": true
+          },
+          "file": {
+            "type": "string",
+            "nullable": true
+          },
+          "evaluator": {
+            "type": "string",
+            "nullable": true
+          },
+          "expertise": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["name", "task", "tags", "descriptionTitle", "descriptionBody", "impact", "severity", "bounty", "status", "data", "expertise"]
+      },
+      "EvaluationDataPostResponse": {
+        "type": "object",
+        "description": "Response after creating a new evaluation data entry.",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "A confirmation message for successful creation."
+          }
+        },
+        "required": ["result"]
+      },
+      "EvaluationDataPatchRequest": {
+        "type": "object",
+        "description": "Request payload for updating an evaluation data entry.",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "status": { "type": "string" },
+          "data": { "type": "object" },
+          "rating": { "type": "integer" }
+        }
+      },
+      "EvaluationDataPatchResponse": {
+        "type": "object",
+        "description": "Response after updating an evaluation data entry.",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "A confirmation message for successful update."
+          }
+        },
+        "required": ["result"]
+      },
+      "EvaluationComment": {
+        "type": "object",
+        "description": "Details of an evaluation data comment.",
+        "properties": {
+          "id": { "type": "integer" },
+          "commenter": { "type": "string" },
+          "body": { "type": "string" },
+          "evaluationDataId": { "type": "integer" },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EvaluationCommentPostRequest": {
+        "type": "object",
+        "description": "Request payload for posting a new comment on evaluation data.",
+        "properties": {
+          "commenter": { "type": "string" },
+          "body": { "type": "string" },
+          "evaluationDataId": { "type": "integer" }
+        },
+        "required": ["commenter", "body", "evaluationDataId"]
+      },
+      "EvaluationCommentPostResponse": {
+        "type": "object",
+        "description": "Response after posting a new comment.",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "A confirmation message for successful comment creation."
+          }
+        },
+        "required": ["result"]
+      },
+      "EvaluationCommentPatchRequest": {
+        "type": "object",
+        "description": "Request payload for updating an evaluation data comment.",
+        "properties": {
+          "commenter": { "type": "string" },
+          "body": { "type": "string" },
+          "evaluationDataId": { "type": "integer" }
+        },
+        "required": ["commenter", "body", "evaluationDataId"]
+      },
+      "EvaluationCommentPatchResponse": {
+        "type": "object",
+        "description": "Response after updating an evaluation data comment.",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "A confirmation message for successful comment update."
+          }
+        },
+        "required": ["result"]
+      },
+      "EvaluationCommentDeleteResponse": {
+        "type": "object",
+        "description": "Response after deleting an evaluation data comment.",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "A confirmation message for successful comment deletion."
+          }
+        },
+        "required": ["result"]
       }
+
+
+
     }
   }
 }
