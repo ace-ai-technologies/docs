@@ -98,7 +98,19 @@
           "api-reference/endpoint/editorTasksPatch"
         ]
       },
-
+      {
+        "group": "Evaluator API",
+        "pages": [
+          "api-reference/endpoint/evaluatorEvaluationData-get",
+          "api-reference/endpoint/evaluatorEvaluationData-post",
+          "api-reference/endpoint/evaluatorEvaluationDataRandom-get",
+          "api-reference/endpoint/evaluatorEvaluationDataPatch",
+          "api-reference/endpoint/evaluatorEvaluationDataComment-get",
+          "api-reference/endpoint/evaluatorEvaluationDataComment-post",
+          "api-reference/endpoint/evaluatorEvaluationDataCommentPatch",
+          "api-reference/endpoint/evaluatorEvaluationDataComment-delete"
+        ]
+      },
       {
         "group": "Changelog",
         "pages": [
