@@ -28,7 +28,7 @@ Ensure you have the following installed on your system:
 
 3. Start the development server:
    ```bash
-   npm run dev
+   npm run dev 
    ```
 
 4. Open your browser to `http://localhost:3000` to view the documentation.
