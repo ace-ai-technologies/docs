@@ -53,38 +53,59 @@
     }
   ],
   "navigation": [
-    {
-      "group": "Get Started",
-      "pages": [
-        "introduction",
-        "quickstart"
-      ]
-    },
-    {
-      "group": "API Documentation",
-      "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "Endpoints",
-      "pages": [
-        "api-reference/endpoint/authLogin",
-        "api-reference/endpoint/syntheticUploadURL-new",
-        "api-reference/endpoint/syntheticDownloadURL-new",
-        "api-reference/endpoint/syntheticGenerate",
-        "api-reference/endpoint/genAIUploadURL-new",
-        "api-reference/endpoint/genAIDownloadURL-new",
-        "api-reference/endpoint/genAIPerform"
-      ]
-    },    
-    {
-      "group": "Changelog",
-      "pages": [
-        "changelog/index"
-      ]
-    }
-  ],
+      {
+        "group": "Get Started",
+        "pages": [
+          "introduction",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "API Documentation",
+        "pages": [
+          "api-reference/introduction"
+        ]
+      },
+      {
+        "group": "Authentication",
+        "pages": [
+          "api-reference/endpoint/authLogin",
+          "api-reference/endpoint/authSignup",
+          "api-reference/endpoint/authProfilePatch"
+        ]
+      },
+      {
+        "group": "Synthetic API",
+        "pages": [
+          "api-reference/endpoint/syntheticUploadURL-new",
+          "api-reference/endpoint/syntheticDownloadURL-new",
+          "api-reference/endpoint/syntheticGenerate"
+        ]
+      },
+      {
+        "group": "GenAI API",
+        "pages": [
+          "api-reference/endpoint/genAIUploadURL-new",
+          "api-reference/endpoint/genAIDownloadURL-new",
+          "api-reference/endpoint/genAIPerform"
+        ]
+      },
+      {
+        "group": "Editor API",
+        "pages": [
+          "api-reference/endpoint/editorTasksRandom-get",
+          "api-reference/endpoint/editorTasksPost",
+          "api-reference/endpoint/editorTasksPatch"
+        ]
+      },
+
+      {
+        "group": "Changelog",
+        "pages": [
+          "changelog/index"
+        ]
+      }
+    ],
   "footerSocials": {
     "x": "https://x.com/mintlify",
     "github": "https://github.com/ace-ai-technologies",
