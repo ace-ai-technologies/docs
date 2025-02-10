@@ -24,30 +24,49 @@ All data will be subject to scrutiny from our team of domain-expert human evalua
 ## Core Functionality
 
 The Ace AI API is organized into several key sections:
-1. **Authentication**: Securely log in to obtain session tokens.
-2. **Synthetic Data**: Upload datasets, request synthetic data generation, and download results.
-3. **Generative AI (GenAI)**: Upload datasets for AI tasks, and evaluate them using custom prompts.
-4. **Data Refinery**: *(Coming Soon!)* A placeholder for data preprocessing and management tasks.
+1. **Authentication**: Sign up, log in, and manage your user profile.
+2. **Synthetic Data**: Upload original datasets, generate synthetic data, and download the results.
+3. **Generative AI (GenAI)**: Upload data for custom AI tasks and retrieve analytical results.
+4. **Evaluator**: Retrieve, create, and update evaluation data, as well as manage comments on evaluation entries.
+5. **Editor**: Retrieve, create, and update editing tasks for enhanced data processing.
+{/* 6. **Data Refinery**: *(Coming Soon!)* A placeholder for advanced data preprocessing and management. */}
+
 
 ## Authentication
 
-The `/auth/v1/login` endpoint handles user login and returns a session token (as a cookie and via Bearer token) that is required for accessing protected endpoints.
+Authentication is the foundation of our API. The following endpoints help you register, log in, and manage your profile:
+- **POST `/auth/v1/signup`**: Register a new user account.
+- **POST `/auth/v1/login`**: Log in and receive a session token (returned as both an HttpOnly cookie and a Bearer token).
+- **PATCH `/auth/v1/profile/{username}`**: Update your user profile with expertise, bio, education, and experiences.
 
 ## Base Endpoints
 
-Below is a quick list of the core API endpoints. For complete details, please refer to the **Endpoints** section in this documentation.
+Below is a quick list of the core API endpoints. For complete details—including request parameters, response formats, and usage examples—please refer to the dedicated pages in the **Endpoints** section.
 
-| Route                           | Method | Description                                                                |
-|---------------------------------|--------|----------------------------------------------------------------------------|
-| `/`                             | GET    | Default route. Returns "hello world!" as a simple health check.            |
-| `/auth/v1/login`               | POST   | Authenticates a user; on success returns/sets a session token.             |
-| `/synthetic/v1/uploadURL`      | POST    | Generates a signed URL for securely uploading datasets.                    |
-| `/synthetic/v1/downloadURL`    | POST    | Generates a signed URL for securely downloading generated or stored data.  |
-| `/synthetic/v1/generate`       | POST   | Requests the creation of synthetic data based on an existing dataset.      |
-| `/genAI/v1/uploadURL`          | POST    | Generates a signed URL to upload data for GenAI tasks.                     |
-| `/genAI/v1/downloadURL`        | POST    | Generates a signed URL to download data used or produced by GenAI tasks.   |
-| `/genAI/v1/perform`           | POST   | Submits a custom prompt for evaluating or analyzing the uploaded dataset.  |
+| Route                                        | Method | Description                                                                |
+|----------------------------------------------|--------|----------------------------------------------------------------------------|
+| `/`                                          | GET    | Default route. Returns "hello world!" as a simple health check.            |
+| `/auth/v1/signup`                            | POST   | Registers a new user account.                                              |
+| `/auth/v1/login`                             | POST   | Authenticates a user and returns a session token.                          |
+| `/auth/v1/profile/{username}`                | PATCH  | Updates a user profile.                                                    |
+| `/synthetic/v1/uploadURL`                      | POST   | Generates a signed URL for securely uploading datasets.                    |
+| `/synthetic/v1/downloadURL`                    | POST   | Generates a signed URL for securely downloading data.                      |
+| `/synthetic/v1/generate`                       | POST   | Requests the creation of synthetic data based on an existing dataset.      |
+| `/genAI/v1/uploadURL`                          | POST   | Generates a signed URL for uploading data for GenAI tasks.                   |
+| `/genAI/v1/downloadURL`                        | POST   | Generates a signed URL for downloading data used or produced by GenAI tasks. |
+| `/genAI/v1/perform`                            | POST   | Submits a custom prompt for AI-based analysis of uploaded data.             |
+| `/evaluator/v1/evaluation-data`                | GET    | Retrieves evaluation data with filtering options (username, status, etc.).  |
+| `/evaluator/v1/evaluation-data`                | POST   | Creates a new evaluation data entry.                                       |
+| `/evaluator/v1/evaluation-data/random`         | GET    | Retrieves a random evaluation data entry based on evaluator username.      |
+| `/evaluator/v1/evaluation-data/{id}`           | PATCH  | Updates evaluation data fields (tags, status, data, rating) for an entry.    |
+| `/evaluator/v1/evaluation-data/comment`        | GET    | Retrieves comments for a specific evaluation data entry.                   |
+| `/evaluator/v1/evaluation-data/comment`        | POST   | Adds a new comment to an evaluation data entry.                            |
+| `/evaluator/v1/evaluation-data/comment/{id}`     | PATCH  | Updates an existing comment on an evaluation data entry.                   |
+| `/evaluator/v1/evaluation-data/comment/{id}`     | DELETE | Deletes a comment from an evaluation data entry.                           |
+| `/editor/v1/tasks/random`                      | GET    | Retrieves a random editing task for a specified task type.                 |
+| `/editor/v1/tasks/{taskType}`                  | POST   | Creates a new editing task of the specified type.                          |
+| `/editor/v1/tasks/{taskType}/{id}`             | PATCH  | Updates an existing editing task.                                          |
 
 ---
 
-This introduction provides a high-level overview of the API, its functionality, and how to get started. For specifics about each endpoint—such as request parameters, response formats, and example usage—please see the dedicated pages in this documentation.
+This introduction provides a high-level overview of the API, its capabilities, and how to get started. For detailed information about each endpoint—including request parameters, response formats, and examples—please see the dedicated pages in the **Endpoints** section.
